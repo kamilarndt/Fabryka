@@ -23,7 +23,7 @@ import { useRouter } from 'next/navigation';
 import { ProjectList } from '../../components/projects/ProjectList';
 import { ProjectFilters } from '../../components/projects/ProjectFilters';
 import { useProjects } from '../../hooks/useProjects';
-import { useDeleteProject, useArchiveProject, useUnarchiveProject } from '../../hooks/useProjects';
+// import { useDeleteProject, useArchiveProject, useUnarchiveProject } from '../../hooks/useProjects';
 import type { Project, ProjectFilters as ProjectFiltersType } from '../../types/project';
 
 export default function ProjectsPage() {
@@ -36,10 +36,10 @@ export default function ProjectsPage() {
     sortOrder: 'desc',
   });
 
-  // Hooks for mutations
-  const deleteProjectMutation = useDeleteProject();
-  const archiveProjectMutation = useArchiveProject();
-  const unarchiveProjectMutation = useUnarchiveProject();
+  // Hooks for mutations - tymczasowo wyłączone
+  // const deleteProjectMutation = useDeleteProject();
+  // const archiveProjectMutation = useArchiveProject();
+  // const unarchiveProjectMutation = useUnarchiveProject();
 
   // Get projects stats for tabs
   const { data: currentProjects } = useProjects({
@@ -81,25 +81,13 @@ export default function ProjectsPage() {
   };
 
   const handleProjectArchive = async (project: Project) => {
-    try {
-      if (project.status === 'archived') {
-        await unarchiveProjectMutation.mutateAsync(project.id);
-      } else {
-        await archiveProjectMutation.mutateAsync(project.id);
-      }
-    } catch (error) {
-      console.error('Błąd podczas archiwizacji projektu:', error);
-    }
+    // Tymczasowo wyłączone
+    console.log('Archive project:', project.id);
   };
 
   const handleProjectDelete = async (project: Project) => {
-    if (window.confirm(`Czy na pewno chcesz usunąć projekt "${project.name}"?`)) {
-      try {
-        await deleteProjectMutation.mutateAsync(project.id);
-      } catch (error) {
-        console.error('Błąd podczas usuwania projektu:', error);
-      }
-    }
+    // Tymczasowo wyłączone
+    console.log('Delete project:', project.id);
   };
 
   return (

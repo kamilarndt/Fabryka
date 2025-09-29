@@ -20,10 +20,11 @@ import {
 import { FiRefreshCw, FiGrid, FiList, FiFilter } from 'react-icons/fi';
 import { ProjectCard } from './ProjectCard';
 import { useProjects } from '../../hooks/useProjects';
-import type { Project, ProjectFilters } from '../../types/project';
+import type { Project, ProjectFilters, ProjectsResponse } from '../../types/project';
 
 interface ProjectListProps {
   filters: ProjectFilters;
+  initialData?: ProjectsResponse;
   onProjectEdit?: (project: Project) => void;
   onProjectView?: (project: Project) => void;
   onProjectArchive?: (project: Project) => void;
@@ -36,6 +37,7 @@ interface ProjectListProps {
 
 export const ProjectList: React.FC<ProjectListProps> = ({
   filters,
+  initialData,
   onProjectEdit,
   onProjectView,
   onProjectArchive,
@@ -52,7 +54,7 @@ export const ProjectList: React.FC<ProjectListProps> = ({
     error,
     refetch,
     isFetching,
-  } = useProjects(filters);
+  } = useProjects(filters, initialData);
 
   const projects = projectsResponse?.projects || [];
   const pagination = projectsResponse?.pagination;

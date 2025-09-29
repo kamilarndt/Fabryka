@@ -31,13 +31,14 @@ export const projectKeys = {
 };
 
 // Hook do pobierania listy projektów
-export const useProjects = (filters: ProjectFilters = {}) => {
+export const useProjects = (filters: ProjectFilters = {}, initialData?: ProjectsResponse) => {
   return useQuery({
     queryKey: projectKeys.list(filters),
     queryFn: () => {
-      // Używamy mock data dopóki baza danych nie będzie skonfigurowana
-      return getMockProjects(filters);
+      // Używamy prawdziwego API
+      return listProjects(filters);
     },
+    initialData: initialData,
     staleTime: 5 * 60 * 1000, // 5 minut
     gcTime: 10 * 60 * 1000, // 10 minut (dawniej cacheTime)
     placeholderData: (previousData) => previousData, // Zachowaj poprzednie dane podczas ładowania nowych

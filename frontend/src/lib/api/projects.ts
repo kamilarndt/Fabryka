@@ -7,6 +7,7 @@ import type {
 } from '../../types/project';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const SERVER_API_BASE_URL = process.env.API_URL || 'http://localhost:5000';
 
 // Helper function to get auth token
 const getAuthToken = (): string | null => {
@@ -40,10 +41,33 @@ const apiRequest = async <T>(
   return response.json();
 };
 
+// Helper function for server-side API requests
+const serverApiRequest = async <T>(
+  endpoint: string, 
+  options: RequestInit = {}
+): Promise<T> => {
+  const config: RequestInit = {
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+    ...options,
+  };
+
+  const response = await fetch(`${SERVER_API_BASE_URL}${endpoint}`, config);
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+};
+
 // API Functions
 
 /**
- * Pobiera listę projektów z opcjonalnymi filtrami
+ * Pobiera listę projektów z opcjonalnymi filtrami (dla client components)
  */
 export const listProjects = async (filters: ProjectFilters = {}): Promise<ProjectsResponse> => {
   const searchParams = new URLSearchParams();
@@ -74,6 +98,40 @@ export const listProjects = async (filters: ProjectFilters = {}): Promise<Projec
   const endpoint = `/api/projects${queryString ? `?${queryString}` : ''}`;
   
   return apiRequest<ProjectsResponse>(endpoint);
+};
+
+/**
+ * Pobiera listę projektów z opcjonalnymi filtrami (dla server components)
+ */
+export const listProjectsServer = async (filters: ProjectFilters = {}): Promise<ProjectsResponse> => {
+  const searchParams = new URLSearchParams();
+  
+  // Dodaj parametry filtrowania
+  if (filters.search) searchParams.append('search', filters.search);
+  if (filters.status?.length) searchParams.append('status', filters.status.join(','));
+  if (filters.client?.length) searchParams.append('client', filters.client.join(','));
+  if (filters.modules?.length) searchParams.append('modules', filters.modules.join(','));
+  if (filters.sortBy) searchParams.append('sortBy', filters.sortBy);
+  if (filters.sortOrder) searchParams.append('sortOrder', filters.sortOrder);
+  if (filters.page) searchParams.append('page', filters.page.toString());
+  if (filters.limit) searchParams.append('limit', filters.limit.toString());
+  
+  // Dodaj zakres dat
+  if (filters.dateRange) {
+    if (filters.dateRange.start) searchParams.append('startDate', filters.dateRange.start);
+    if (filters.dateRange.end) searchParams.append('endDate', filters.dateRange.end);
+  }
+  
+  // Dodaj lokalizację
+  if (filters.location) {
+    if (filters.location.city) searchParams.append('city', filters.location.city);
+    if (filters.location.radius) searchParams.append('radius', filters.location.radius.toString());
+  }
+
+  const queryString = searchParams.toString();
+  const endpoint = `/api/projects${queryString ? `?${queryString}` : ''}`;
+  
+  return serverApiRequest<ProjectsResponse>(endpoint);
 };
 
 /**

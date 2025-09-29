@@ -23,12 +23,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get('/health', (req: any, res: any) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
 // API routes
-app.get('/api', (req, res) => {
+app.get('/api', (req: any, res: any) => {
   res.json({ message: 'NextFab API is running!' });
 });
 
