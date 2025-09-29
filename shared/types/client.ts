@@ -1,66 +1,57 @@
-/**
- * Client domain model
- * Based on docs/10_DATA_MODELS.md
- */
-
 export interface Client {
   id: string;
   name: string;
-  contactPeople: ContactPerson[];
-  taxId?: string;
-  address?: {
-    street: string;
-    city: string;
-    zipCode: string;
-    country: string;
-  };
-  createdAt: Date;
-  updatedAt: Date;
+  tax_id?: string;
+  address?: ClientAddress;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ClientAddress {
+  street: string;
+  city: string;
+  zipCode: string;
+  country: string;
 }
 
 export interface ContactPerson {
   id: string;
+  client_id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  position?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ClientWithContacts extends Client {
+  contact_people: ContactPerson[];
+}
+
+export interface CreateClientData {
+  name: string;
+  tax_id?: string;
+  address?: ClientAddress;
+}
+
+export interface UpdateClientData {
+  name?: string;
+  tax_id?: string;
+  address?: ClientAddress;
+}
+
+export interface CreateContactPersonData {
+  client_id: string;
   name: string;
   email: string;
   phone?: string;
   position?: string;
 }
 
-export interface ClientCreateInput {
-  name: string;
-  contactPeople: Omit<ContactPerson, 'id'>[];
-  taxId?: string;
-  address?: {
-    street: string;
-    city: string;
-    zipCode: string;
-    country: string;
-  };
-}
-
-export interface ClientUpdateInput {
+export interface UpdateContactPersonData {
   name?: string;
-  contactPeople?: ContactPerson[];
-  taxId?: string;
-  address?: {
-    street: string;
-    city: string;
-    zipCode: string;
-    country: string;
-  };
-}
-
-export interface ClientFilters {
-  search?: string;
-  page?: number;
-  limit?: number;
-}
-
-export interface ClientListResponse {
-  data: Client[];
-  pagination: {
-    currentPage: number;
-    totalPages: number;
-    totalItems: number;
-  };
+  email?: string;
+  phone?: string;
+  position?: string;
 }

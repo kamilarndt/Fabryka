@@ -1,23 +1,104 @@
-# === KONSTYTUCJA PROJEKTU NEXTFAB v2.0 ===
+# NextFab Cursor Rules
 
-## 1. Twoja Rola i Tożsamość
-- Jesteś **FabrykaManage V 2.0**, doświadczonym projektantem i deweloperem aplikacji.
-- Twoim celem jest tworzenie czystego, wydajnego i w pełni przetestowanego kodu, który jest w 100% zgodny z naszą dokumentacją.
-- Twoim jedynym źródłem prawdy jest folder `/docs`. ZAWSZE używaj komendy `@docs`, aby się do niego odwołać.
+## Project Overview
+You are working on NextFab - a production management system for Fabryka Dekoracji. This is a full-stack application built with Next.js 15, React 18, Chakra UI v3, Node.js/Express backend, and Supabase database.
 
-## 2. Architektura i Stack Technologiczny (Niezmienne)
-- **Frontend:** Next.js 14+ (App Router), React 19, Chakra UI v3, TanStack React Query, TypeScript.
-- **Backend:** Node.js, Express.js, TypeScript.
-- **Baza Danych:** Supabase (PostgreSQL).
-- **Testowanie:** Vitest (jednostkowe), Playwright (E2E).
-- **Stylizacja:** Stosujemy **Design Tokens** i komponenty zdefiniowane w `docs/03_DESIGN_SYSTEM.md`. Zawsze odwołuj się do tego dokumentu przy tworzeniu UI.
+## Architecture
+- **Frontend**: Next.js 15 with App Router, React 18, Chakra UI v3, TanStack React Query
+- **Backend**: Node.js, Express.js, TypeScript
+- **Database**: Supabase (PostgreSQL)
+- **Testing**: Vitest (unit), Playwright (E2E)
+- **Styling**: Chakra UI v3 with design tokens
 
-## 3. Metodologia Pracy (Obowiązkowa)
-- **Test-Driven Development (TDD):** To jest najważniejsza zasada. Zanim napiszesz JAKIKOLWIEK kod implementujący logikę, musisz najpierw napisać test jednostkowy (Vitest), który go weryfikuje. Użyj komendy `/test`, aby przyspieszyć ten proces. Twój workflow to zawsze: **Czerwony (napisz test) -> Zielony (napisz kod) -> Refaktor**.
-- **Jakość Kodu:** Po napisaniu kodu, zawsze używaj funkcji "Fix Linter Errors", aby automatycznie naprawić błędy ESLint.
-- **Modele Danych:** Wszystkie struktury danych muszą być zgodne z interfejsami w `docs/10_DATA_MODELS.md`.
-- **API:** Cała komunikacja z backendem musi odbywać się zgodnie z kontraktem zdefiniowanym w `docs/11_API_REFERENCE.md`.
+## Development Principles
 
-## 4. Automatyzacja i Samodzielność
-- **Debugowanie:** W przypadku błędu, Twoim pierwszym krokiem jest użycie funkcji "Debug with AI". Przeanalizuj błąd i zaproponuj poprawkę.
-- **Dokumentowanie:** Dla każdej nowej, złożonej funkcji, użyj komendy "Generate Docs", aby stworzyć dokumentację w formacie JSDoc.
+### Test-Driven Development (TDD)
+- ALWAYS write tests first before implementing logic
+- Use Vitest for unit tests, Playwright for E2E tests
+- Maintain 80%+ test coverage
+- Red -> Green -> Refactor cycle
+
+### Code Quality
+- Use TypeScript strictly - no `any` types
+- Follow ESLint rules and Prettier formatting
+- Use meaningful variable and function names
+- Write self-documenting code with JSDoc comments
+
+### API Design
+- Follow RESTful conventions
+- Use proper HTTP status codes
+- Implement proper error handling and validation
+- Use Zod for schema validation
+
+### UI/UX
+- Use Chakra UI v3 components consistently
+- Follow the design system in `docs/03_DESIGN_SYSTEM.md`
+- Ensure mobile responsiveness
+- Implement proper accessibility features
+
+## File Structure
+```
+/
+├── frontend/          # Next.js frontend
+├── backend/           # Express.js backend
+├── shared/            # Shared types and utilities
+├── docs/              # Documentation
+└── database/          # Database schemas and migrations
+```
+
+## Key Conventions
+- Use PascalCase for components and types
+- Use camelCase for functions and variables
+- Use kebab-case for file names
+- Use descriptive names that explain intent
+- Always export types and interfaces
+- Use proper error boundaries and loading states
+
+## Database
+- Use Supabase for all database operations
+- Follow the schema defined in `database/init.sql`
+- Use proper foreign key relationships
+- Implement Row Level Security (RLS) policies
+- Use UUIDs for all primary keys
+
+## Environment
+- Use environment variables for configuration
+- Never commit secrets to version control
+- Use proper environment separation (dev/staging/prod)
+
+## Performance
+- Implement proper caching strategies
+- Use React Query for server state management
+- Optimize bundle sizes
+- Use proper image optimization
+- Implement lazy loading where appropriate
+
+## Security
+- Validate all inputs on both frontend and backend
+- Use proper authentication and authorization
+- Implement CSRF protection
+- Use HTTPS in production
+- Follow OWASP security guidelines
+
+## Documentation
+- Keep README files updated
+- Document complex business logic
+- Use JSDoc for function documentation
+- Maintain API documentation
+- Document deployment procedures
+
+## Git Workflow
+- Use conventional commit messages
+- Create feature branches for new features
+- Use pull requests for code review
+- Keep commits atomic and focused
+- Write descriptive commit messages
+
+## AI Assistant Guidelines
+- Always follow TDD approach
+- Generate comprehensive tests
+- Ensure type safety
+- Follow established patterns
+- Provide clear explanations
+- Suggest improvements and optimizations
+- Help with debugging and troubleshooting

@@ -1,56 +1,55 @@
-/**
- * Project domain model
- * Based on docs/10_DATA_MODELS.md
- */
-
 export interface Project {
   id: string;
   name: string;
-  projectNumber: string;
-  status: 'draft' | 'active' | 'completed' | 'paused' | 'cancelled';
-  clientId: string;
-  modules: string[];
-  timeline: {
-    startDate?: Date;
-    endDate?: Date;
-  };
-  createdAt: Date;
-  updatedAt: Date;
+  project_number: string;
+  status: ProjectStatus;
+  client_id: string;
+  modules: ProjectModule[];
+  timeline: ProjectTimeline;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface ProjectCreateInput {
+export type ProjectStatus = 'draft' | 'active' | 'completed' | 'paused' | 'cancelled';
+
+export type ProjectModule = 
+  | 'overview' 
+  | 'elements' 
+  | 'quotation' 
+  | 'logistics' 
+  | 'crew' 
+  | 'materials' 
+  | 'concept' 
+  | 'schedule' 
+  | 'files' 
+  | '3d_model';
+
+export interface ProjectTimeline {
+  startDate: string;
+  endDate: string;
+  milestones?: ProjectMilestone[];
+}
+
+export interface ProjectMilestone {
+  id: string;
   name: string;
-  clientId: string;
-  modules: string[];
-  timeline?: {
-    startDate?: Date;
-    endDate?: Date;
-  };
+  date: string;
+  completed: boolean;
 }
 
-export interface ProjectUpdateInput {
+export interface CreateProjectData {
+  name: string;
+  project_number: string;
+  client_id: string;
+  modules?: ProjectModule[];
+  timeline?: Partial<ProjectTimeline>;
+}
+
+export interface UpdateProjectData {
   name?: string;
-  status?: Project['status'];
-  modules?: string[];
-  timeline?: {
-    startDate?: Date;
-    endDate?: Date;
-  };
-}
-
-export interface ProjectFilters {
-  status?: Project['status'];
-  search?: string;
-  clientId?: string;
-  page?: number;
-  limit?: number;
-}
-
-export interface ProjectListResponse {
-  data: Project[];
-  pagination: {
-    currentPage: number;
-    totalPages: number;
-    totalItems: number;
-  };
+  project_number?: string;
+  status?: ProjectStatus;
+  client_id?: string;
+  modules?: ProjectModule[];
+  timeline?: Partial<ProjectTimeline>;
 }
