@@ -6,11 +6,16 @@ export interface Project {
   client_id: string;
   modules: ProjectModule[];
   timeline: ProjectTimeline;
+  budget?: {
+    planned: number;
+    spent: number;
+    remaining: number;
+  };
   created_at: string;
   updated_at: string;
 }
 
-export type ProjectStatus = 'draft' | 'active' | 'completed' | 'paused' | 'cancelled';
+export type ProjectStatus = 'draft' | 'active' | 'completed' | 'paused' | 'cancelled' | 'archived';
 
 export type ProjectModule = 
   | 'overview' 
