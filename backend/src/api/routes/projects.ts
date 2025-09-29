@@ -26,22 +26,161 @@ const updateProjectSchema = z.object({
 // GET /api/projects
 router.get('/', async (req, res) => {
   try {
-    const { status } = req.query;
+    const { 
+      status, 
+      search, 
+      client, 
+      modules, 
+      sortBy = 'updated_at', 
+      sortOrder = 'desc',
+      page = 1,
+      limit = 10,
+      startDate,
+      endDate,
+      city,
+      radius
+    } = req.query;
     
-    let query = supabase.from('projects').select('*');
+    // Parse query parameters
+    const pageNum = parseInt(page as string) || 1;
+    const limitNum = parseInt(limit as string) || 10;
+    const offset = (pageNum - 1) * limitNum;
     
+    // Build query with joins for client data
+    let query = supabase
+      .from('projects')
+      .select(`
+        *,
+        clients!inner(
+          id,
+          name,
+          tax_id,
+          address
+        )
+      `);
+    
+    // Apply filters
     if (status) {
-      query = query.eq('status', status);
+      const statusArray = Array.isArray(status) ? status : [status];
+      query = query.in('status', statusArray);
     }
     
-    const { data, error } = await query.order('created_at', { ascending: false });
+    if (search) {
+      query = query.or(`name.ilike.%${search}%,project_number.ilike.%${search}%,description.ilike.%${search}%`);
+    }
+    
+    if (client) {
+      const clientArray = Array.isArray(client) ? client : [client];
+      query = query.in('client_id', clientArray);
+    }
+    
+    if (modules) {
+      const modulesArray = Array.isArray(modules) ? modules : [modules];
+      query = query.overlaps('modules', modulesArray);
+    }
+    
+    if (startDate) {
+      query = query.gte('created_at', startDate);
+    }
+    
+    if (endDate) {
+      query = query.lte('created_at', endDate);
+    }
+    
+    // Apply sorting
+    const ascending = sortOrder === 'asc';
+    switch (sortBy) {
+      case 'name':
+        query = query.order('name', { ascending });
+        break;
+      case 'createdAt':
+        query = query.order('created_at', { ascending });
+        break;
+      case 'updatedAt':
+        query = query.order('updated_at', { ascending });
+        break;
+      case 'endDate':
+        query = query.order('timeline->>endDate', { ascending });
+        break;
+      default:
+        query = query.order('updated_at', { ascending: false });
+    }
+    
+    // Get total count for pagination
+    const { count, error: countError } = await supabase
+      .from('projects')
+      .select('*', { count: 'exact', head: true });
+    
+    if (countError) {
+      return res.status(500).json({ error: countError.message });
+    }
+    
+    // Apply pagination
+    query = query.range(offset, offset + limitNum - 1);
+    
+    const { data, error } = await query;
     
     if (error) {
       return res.status(500).json({ error: error.message });
     }
     
-    res.json(data || []);
+    // Get contact persons for each client
+    const clientIds = [...new Set((data || []).map(p => p.client_id))];
+    const { data: contacts } = await supabase
+      .from('contact_persons')
+      .select('*')
+      .in('client_id', clientIds);
+    
+    // Create a map of client_id to contact person
+    const contactsMap = new Map();
+    (contacts || []).forEach(contact => {
+      if (!contactsMap.has(contact.client_id)) {
+        contactsMap.set(contact.client_id, contact);
+      }
+    });
+    
+    // Transform data to match frontend expectations
+    const transformedData = (data || []).map(project => {
+      const contact = contactsMap.get(project.client_id);
+      const clientAddress = project.clients?.address || {};
+      
+      return {
+        ...project,
+        client: {
+          id: project.clients.id,
+          name: project.clients.name,
+          email: contact?.email || '',
+          phone: contact?.phone || ''
+        },
+        location: {
+          address: clientAddress.street || '',
+          city: clientAddress.city || '',
+          postalCode: clientAddress.zipCode || '',
+          country: clientAddress.country || 'Polska'
+        },
+        progress: project.progress || 0,
+        budget: project.budget || {
+          planned: 0,
+          spent: 0,
+          remaining: 0
+        }
+      };
+    });
+    
+    const total = count || 0;
+    const pages = Math.ceil(total / limitNum);
+    
+    res.json({
+      projects: transformedData,
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total,
+        pages
+      }
+    });
   } catch (error) {
+    console.error('Error fetching projects:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

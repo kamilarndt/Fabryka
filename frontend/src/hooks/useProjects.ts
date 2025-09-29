@@ -35,11 +35,8 @@ export const useProjects = (filters: ProjectFilters = {}) => {
   return useQuery({
     queryKey: projectKeys.list(filters),
     queryFn: () => {
-      // W trybie development używamy mock data
-      if (process.env.NODE_ENV === 'development') {
-        return getMockProjects(filters);
-      }
-      return listProjects(filters);
+      // Używamy mock data dopóki baza danych nie będzie skonfigurowana
+      return getMockProjects(filters);
     },
     staleTime: 5 * 60 * 1000, // 5 minut
     gcTime: 10 * 60 * 1000, // 10 minut (dawniej cacheTime)
