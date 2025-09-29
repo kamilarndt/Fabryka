@@ -1,0 +1,70 @@
+---
+title: Component Development Rules
+description: Zasady rozwoju komponentów NextFab
+applies_to: ["src/components/**"]
+---
+
+# Component Development Rules - NextFab
+
+## Struktura Komponentów
+```typescript
+// Template dla komponenta aplikacyjnego
+interface ComponentProps {
+  // Props definition
+}
+
+export const Component = ({ ...props }: ComponentProps) => {
+  // Component logic
+  
+  return (
+    // JSX with proper accessibility
+  );
+};
+
+Component.displayName = 'Component';
+```
+
+## Design System Integration
+- Używaj tokenów z Chakra UI v3
+- Komponenty prymitywne w src/components/ui/
+- Komponenty aplikacyjne z proper naming
+
+## Accessibility (a11y)
+- Proper ARIA labels
+- Keyboard navigation support
+- Screen reader compatibility
+- Color contrast compliance
+
+## Performance Optimization
+- React.memo dla expensive components
+- useMemo/useCallback gdzie appropriate
+- Lazy loading dla heavy components
+
+## Props Pattern
+```typescript
+// Base props pattern
+interface BaseProps {
+  className?: string;
+  children?: React.ReactNode;
+  'data-testid'?: string;
+}
+
+interface SpecificProps extends BaseProps {
+  // Specific component props
+}
+```
+
+## Error Boundaries
+```typescript
+// Component-level error handling
+const ComponentWithErrorBoundary = () => (
+  <ErrorBoundary fallback={<ComponentFallback />}>
+    <Component />
+  </ErrorBoundary>
+);
+```
+
+## Storybook Documentation
+- Story dla każdego głównego stanu komponenta
+- Controls dla interactive props
+- Documentation dla complex components

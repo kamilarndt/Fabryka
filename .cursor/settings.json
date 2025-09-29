@@ -1,0 +1,18 @@
+{
+  "terminal.requireApproval": true,
+  "terminal.allowedCommands": [
+    "npm run dev", "npm run build", "npm run test", "npm run lint",
+    "git add", "git commit", "git push", "git pull",
+    "mkdir", "touch", "cat", "ls", "cd", "echo"
+  ],
+  "terminal.blockedCommands": [
+    "rm -rf", "sudo", "chmod 777", "format", "del /f"
+  ],
+  "cursor.general.enableAutoSave": true,
+  "cursor.general.enableFormatOnSave": true,
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}

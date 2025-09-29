@@ -1,0 +1,71 @@
+---
+title: NextFab Main Rules
+description: Główne zasady dla aplikacji NextFab
+type: always
+---
+
+# NextFab - System Zarządzania Produkcją
+
+## Opis Projektu
+NextFab to kompleksowy system do zarządzania produkcją w Fabryce Dekoracji. Aplikacja składa się z:
+- Frontend: Next.js 14 + React 19 + TypeScript + Chakra UI v3
+- Backend: Node.js + Express.js + TypeScript
+- Database: Supabase PostgreSQL
+- Deployment: Docker
+
+## Architektura
+- Client-Server architecture
+- Modułowa struktura z wymiennymi komponentami
+- RESTful API z automatycznymi aktualizacjami w czasie rzeczywistym
+- TDD approach z Vitest + Playwright
+
+## Kluczowe Moduły
+1. Projects - zarządzanie projektami
+2. Clients - baza klientów (CRM)  
+3. Materials - system zarządzania materiałami (UMMS)
+4. Elements - komponenty produkcyjne (kafelki)
+5. Quotation - system wycen
+6. Logistics - zarządzanie transportem
+7. Crew - zarządzanie zespołem
+8. Schedule - planowanie harmonogramów
+
+## Workflow Developera
+- Feature branches z main branch
+- Conventional Commits
+- Pre-commit hooks z Husky
+- ESLint + Prettier + TypeScript strict
+- TDD: Red-Green-Refactor cycle
+
+## Design System
+- Chakra UI v3 jako podstawa
+- Dark mode first
+- Feather Icons (react-icons/fi)
+- System spacing oparty na siatce 4px
+- Konsystentna paleta kolorów
+
+## Zasady Ogólne
+- Zawsze używaj TypeScript z strict typami - unikaj 'any'
+- Preferuj functional components nad class components
+- Używaj async/await zamiast .then()
+- Zawsze dodawaj właściwe typy dla funkcji i zmiennych
+- Kod musi być czytelny i dobrze udokumentowany
+
+## Jakość Kodu
+- Przed każdym commitem uruchom ESLint i napraw wszystkie błędy
+- Używaj Prettier do formatowania kodu
+- Zawsze pisz testy jednostkowe dla nowej logiki biznesowej
+- Dodawaj logowanie dla ważnych operacji
+- Używaj TDD (Test-Driven Development)
+
+## Konwencje Nazewnicze
+- Pliki komponentów: PascalCase.tsx
+- Pliki hooków: use[Name].ts
+- Pliki utilów: camelCase.ts
+- Zmienne: camelCase
+- Stałe: UPPER_SNAKE_CASE
+
+## Błędy i Debugging
+- Zawsze dodawaj error handling
+- Używaj try-catch dla operacji async
+- Loguj błędy z odpowiednim poziomem (error, warn, info)
+- Dodawaj meaningful error messages

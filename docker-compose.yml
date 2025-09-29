@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Frontend - Next.js
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NEXT_PUBLIC_BACKEND_URL=http://backend:5000
+      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+    depends_on:
+      - backend
+    networks:
+      - nextfab-network
+
+  # Backend - Node.js/Express
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      - DATABASE_URL=postgresql://nextfab:nextfab123@db:5432/nextfab
+      - JWT_SECRET=your_jwt_secret_key
+      - NODE_ENV=development
+    depends_on:
+      - db
+    networks:
+      - nextfab-network
+
+  # Database - PostgreSQL
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=nextfab
+      - POSTGRES_USER=nextfab
+      - POSTGRES_PASSWORD=nextfab123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - nextfab-network
+
+  # Redis (opcjonalne - dla cache)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - nextfab-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  nextfab-network:
+    driver: bridge

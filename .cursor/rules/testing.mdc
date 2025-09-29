@@ -1,0 +1,73 @@
+---
+title: Testing Rules
+description: Zasady testowania dla NextFab
+applies_to: ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "tests/**"]
+---
+
+# Testing Rules - NextFab
+
+## Test-Driven Development (TDD)
+1. **Red**: Napisz test który nie przechodzi
+2. **Green**: Napisz minimalny kod żeby test przechodził  
+3. **Refactor**: Popraw kod zachowując zielone testy
+
+## Vitest - Testy Jednostkowe
+```typescript
+// Template dla testu jednostkowego
+import { describe, it, expect, beforeEach } from 'vitest';
+
+describe('generateElementCode', () => {
+  it('should return a string starting with "EL-"', () => {
+    const code = generateElementCode();
+    expect(code).toMatch(/^EL-/);
+    expect(code.length).toBeGreaterThan(3);
+  });
+});
+```
+
+## Playwright - Testy E2E
+```typescript
+// Template dla testu E2E
+import { test, expect } from '@playwright/test';
+
+test('user can create new project', async ({ page }) => {
+  await page.goto('/projects');
+  await page.click('[data-testid="create-project-btn"]');
+  await page.fill('[data-testid="project-name"]', 'Test Project');
+  await page.click('[data-testid="save-btn"]');
+  
+  await expect(page.locator('[data-testid="project-list"]'))
+    .toContainText('Test Project');
+});
+```
+
+## Coverage Requirements
+- Minimum 80% code coverage dla logiki biznesowej
+- 100% coverage dla critical paths (authentication, payments)
+- Edge cases testing
+
+## Test Organization
+```
+tests/
+├── unit/           # Vitest tests
+│   ├── lib/
+│   ├── components/
+│   └── api/
+├── e2e/           # Playwright tests
+│   ├── auth/
+│   ├── projects/
+│   └── workflows/
+└── fixtures/      # Test data
+```
+
+## Mock Strategy
+- Mock external APIs
+- Database mocking dla unit tests
+- Test containers dla integration tests
+- Snapshot testing dla UI components
+
+## CI/CD Integration
+- Tests must pass przed merge do main
+- Parallel test execution
+- Test reports w PR comments
+- Performance regression testing

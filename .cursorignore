@@ -1,0 +1,217 @@
+# NextFab - Cursor Ignore
+# Pliki i foldery wykluczone z indeksowania Cursor IDE
+
+# Dependencies
+node_modules/
+.next/
+.nuxt/
+dist/
+build/
+out/
+
+# Cache directories
+.cache/
+.turbo/
+.vercel/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+
+# Environment files
+.env*
+!.env.example
+!.env.local.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+.nyc_output/
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Large files and archives
+*.zip
+*.tar.gz
+*.tar.bz2
+*.rar
+*.7z
+*.dmg
+*.iso
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# Build artifacts
+*.tsbuildinfo
+.next/
+.nuxt/
+dist/
+build/
+out/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Storybook build outputs
+storybook-static/
+
+# Temporary folders
+tmp/
+temp/
+
+# Lock files (keep package-lock.json but ignore others)
+yarn.lock
+pnpm-lock.yaml
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Documentation build
+docs/_build/
+docs/.doctrees/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Docker
+.dockerignore
+
+# Supabase
+.supabase/
+
+# Vercel
+.vercel/
+
+# Netlify
+.netlify/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+
+# Local development
+.local/
+local/
+
+# Generated files
+generated/
+auto-generated/
+
+# Large media files
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.webm
+*.mkv
+*.mp3
+*.wav
+*.flac
+*.aac
+*.ogg
+
+# Large images (keep small ones for documentation)
+*.psd
+*.ai
+*.sketch
+*.fig
+
+# Archive files
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+*.bz2
+
+# Executable files
+*.exe
+*.app
+*.deb
+*.rpm
+*.msi
+
+# System files
+*.sys
+*.dll
+*.so
+*.dylib
+
+# Configuration files that might contain secrets
+config/production.json
+config/staging.json
+secrets/
+.secrets/
+
+# Local development databases
+*.sqlite
+*.db
+data/

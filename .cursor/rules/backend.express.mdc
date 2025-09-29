@@ -1,0 +1,50 @@
+# Backend Express.js Rules
+
+## Architecture
+- Use Express.js with TypeScript
+- Follow RESTful API conventions
+- Implement proper error handling with custom error classes
+- Use middleware for cross-cutting concerns (logging, validation, auth)
+
+## Validation
+- Use Zod for all request/response validation
+- Create DTOs (Data Transfer Objects) for API contracts
+- Validate all inputs at the boundary
+- Return consistent error responses
+
+## Logging
+- Use Pino for structured logging
+- Log all HTTP requests and responses
+- Log errors with stack traces
+- Include correlation IDs for request tracing
+
+## Database
+- Use Supabase client for PostgreSQL operations
+- Implement proper connection pooling
+- Use transactions for multi-table operations
+- Handle database errors gracefully
+
+## Testing
+- Write unit tests for all business logic
+- Use Vitest for testing framework
+- Mock external dependencies
+- Test error scenarios and edge cases
+
+## Code Style
+- Use strict TypeScript (no `any` types)
+- Follow functional programming principles where possible
+- Use async/await instead of promises
+- Implement proper error boundaries
+
+## Security
+- Validate all inputs
+- Sanitize data before database operations
+- Use proper CORS configuration
+- Implement rate limiting
+- Use environment variables for secrets
+
+## Performance
+- Implement proper caching strategies
+- Use database indexes appropriately
+- Optimize queries
+- Implement pagination for large datasets

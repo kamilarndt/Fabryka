@@ -1,0 +1,61 @@
+# Frontend Next.js Rules
+
+## Architecture
+- Use Next.js 14+ with App Router
+- Use React 19 with TypeScript
+- Follow component composition patterns
+- Implement proper state management with TanStack React Query
+
+## UI Framework
+- Use Chakra UI v3 for all UI components
+- Follow Design System from `docs/03_DESIGN_SYSTEM.md`
+- Use design tokens for consistent styling
+- Implement responsive design patterns
+
+## Component Structure
+- Create reusable components in `src/components/`
+- Use proper TypeScript interfaces for props
+- Implement proper error boundaries
+- Use React.memo for performance optimization
+
+## State Management
+- Use TanStack React Query for server state
+- Use React Context for global UI state
+- Use local state for component-specific data
+- Implement proper loading and error states
+
+## Routing
+- Use Next.js App Router conventions
+- Implement proper page layouts
+- Use dynamic routes for resource IDs
+- Implement proper navigation patterns
+
+## Forms and Validation
+- Use React Hook Form for form management
+- Use Zod for client-side validation
+- Implement proper form error handling
+- Use controlled components
+
+## Performance
+- Implement proper code splitting
+- Use dynamic imports for large components
+- Optimize images with Next.js Image component
+- Implement proper caching strategies
+
+## Testing
+- Write unit tests for components
+- Use Playwright for E2E testing
+- Test user interactions and workflows
+- Mock API calls in tests
+
+## Accessibility
+- Use semantic HTML elements
+- Implement proper ARIA attributes
+- Ensure keyboard navigation
+- Test with screen readers
+
+## SEO
+- Use proper meta tags
+- Implement structured data
+- Use Next.js Head component
+- Optimize for Core Web Vitals

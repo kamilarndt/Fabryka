@@ -1,0 +1,19 @@
+[
+  {
+    "key": "ctrl+shift+d",
+    "command": "workbench.action.terminal.new",
+    "when": "terminalFocus"
+  },
+  {
+    "key": "ctrl+shift+r", 
+    "command": "workbench.action.reloadWindow"
+  },
+  {
+    "key": "ctrl+shift+b",
+    "command": "workbench.action.tasks.build"
+  },
+  {
+    "key": "ctrl+shift+t",
+    "command": "workbench.action.tasks.test"
+  }
+]

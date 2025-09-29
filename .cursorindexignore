@@ -1,0 +1,22 @@
+# Legacy documentation that shouldn't be auto-indexed
+docs/archive/
+docs/legacy_spec/
+
+# Test fixtures and mock data
+**/__tests__/fixtures/
+**/test/fixtures/
+**/mocks/
+
+# Generated files
+**/generated/
+**/auto-generated/
+
+# Large data files
+**/*.json
+**/*.csv
+**/*.sql
+
+# Documentation that should be referenced manually
+docs/archive/README.md
+docs/archive/USER_GUIDE.md
+docs/archive/DEVELOPMENT.md

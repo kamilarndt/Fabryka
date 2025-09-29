@@ -1,0 +1,64 @@
+---
+title: Backend Development Rules  
+description: Zasady dla rozwoju backendu NextFab
+applies_to: ["backend/**", "server/**", "api/**"]
+---
+
+# Backend Development Rules - NextFab
+
+## Node.js + Express.js Standards
+- Middleware do error handling
+- Request validation z Joi lub Zod
+- Proper HTTP status codes
+- RESTful API design principles
+
+## TypeScript Backend
+- Strict type checking enabled
+- Interfaces dla request/response models
+- Proper error types definition
+- Generic types dla reusable functions
+
+## API Design
+- Consistent endpoint naming: /api/v1/resource
+- Proper HTTP methods (GET, POST, PUT, DELETE)
+- Query parameters dla filtering/pagination
+- Request body validation
+
+## Database (Supabase)
+- Row Level Security (RLS) dla wszystkich tabel
+- Proper indexes dla performance
+- Database transactions dla critical operations
+- Connection pooling
+
+## Error Handling
+```typescript
+// Standard error response format
+interface ErrorResponse {
+  error: string;
+  message: string;
+  statusCode: number;
+  timestamp: string;
+}
+```
+
+## Security
+- JWT authentication with proper expiration
+- Input sanitization
+- CORS configuration
+- Rate limiting dla API endpoints
+
+## Logging
+```typescript
+// Use structured logging
+logger.info('User login attempt', { 
+  userId, 
+  ip: req.ip, 
+  userAgent: req.get('User-Agent') 
+});
+```
+
+## Environment Configuration
+- .env dla development
+- Environment-specific configs
+- Secrets management
+- Health check endpoints

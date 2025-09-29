@@ -1,0 +1,88 @@
+---
+title: API Development Rules
+description: Zasady rozwoju API dla NextFab
+applies_to: ["**/api/**", "**/routes/**"]
+---
+
+# API Development Rules - NextFab
+
+## RESTful Design
+```
+GET /api/projects # Lista projektów
+POST /api/projects # Nowy projekt
+GET /api/projects/{id} # Szczegóły projektu
+PUT /api/projects/{id} # Update projektu
+DELETE /api/projects/{id} # Usuń projekt
+```
+
+## Response Format
+```typescript
+// Success response
+interface SuccessResponse<T> {
+  data: T;
+  pagination?: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+  };
+}
+
+// Error response  
+interface ErrorResponse {
+  error: string;
+  message: string;
+  statusCode: number;
+  timestamp: string;
+}
+```
+
+## Input Validation
+```typescript
+import { z } from 'zod';
+
+const CreateProjectSchema = z.object({
+  name: z.string().min(1).max(255),
+  clientId: z.string().uuid(),
+  modules: z.array(z.string()).optional(),
+});
+```
+
+## Authentication & Authorization
+```typescript
+// JWT middleware
+const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ');
+  
+  if (!token) {
+    return res.status(401).json({ error: 'Access token required' });
+  }
+  
+  // Verify token logic
+};
+```
+
+## Database Operations
+```typescript
+// Repository pattern
+class ProjectRepository {
+  async findById(id: string): Promise<Project | null> {
+    // Database query with proper error handling
+  }
+  
+  async create(project: CreateProjectData): Promise<Project> {
+    // Create with transaction if needed
+  }
+}
+```
+
+## Logging & Monitoring
+```typescript
+// Structured logging dla API calls
+logger.info('API call', {
+  method: req.method,
+  url: req.url,
+  userId: req.user?.id,
+  duration: Date.now() - startTime
+});
+```

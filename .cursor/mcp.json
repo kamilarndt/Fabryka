@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": ["@supabase/mcp-server"],
+      "env": {
+        "SUPABASE_URL": "${SUPABASE_URL}",
+        "SUPABASE_ANON_KEY": "${SUPABASE_ANON_KEY}",
+        "SUPABASE_SERVICE_ROLE_KEY": "${SUPABASE_SERVICE_ROLE_KEY}"
+      }
+    },
+    "chakra-ui": {
+      "command": "npx",
+      "args": ["@chakra-ui/mcp-server"]
+    },
+    "nextjs": {
+      "command": "npx", 
+      "args": ["@nextjs/mcp-server"]
+    },
+    "typescript": {
+      "command": "npx",
+      "args": ["@typescript/mcp-server"]
+    }
+  }
+}

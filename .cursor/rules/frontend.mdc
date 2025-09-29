@@ -1,0 +1,54 @@
+---
+title: Frontend Development Rules
+description: Zasady dla rozwoju frontendu NextFab
+applies_to: ["src/app/**", "src/components/**", "**.tsx", "**.jsx"]
+---
+
+# Frontend Development Rules - NextFab
+
+## Next.js 14 Best Practices
+- Używaj App Router zamiast Pages Router
+- Komponenty serwerowe domyślnie, Client Components tylko gdy potrzebne
+- Używaj Next.js Image dla optymalizacji obrazów
+- Implementuj proper loading states i error boundaries
+
+## React 19 Guidelines
+- Functional components z hooks
+- Używaj React.memo() dla optymalizacji wydajności
+- Custom hooks dla złożonej logiki stanu
+- Proper dependency arrays w useEffect
+
+## Chakra UI v3 Standards
+- Używaj design tokenów zamiast hardcoded wartości
+- Komponenty prymitywne z src/components/ui/
+- Komponenty aplikacyjne z src/components/
+- Konsystentne spacing (4px, 8px, 12px, 16px, 24px, 32px)
+
+## State Management
+- TanStack React Query dla server state
+- React Context dla globalnego UI state
+- Local state z useState dla komponentów
+
+## Struktura Plików
+```
+src/
+├── app/ # Next.js App Router
+├── components/
+│   ├── ui/ # Komponenty prymitywne (UI Kit)
+│   └── [feature]/ # Komponenty aplikacyjne
+├── lib/ # Utility functions
+├── types/ # TypeScript definitions
+└── hooks/ # Custom React hooks
+```
+
+## Error Handling
+- Error boundaries dla każdego głównego widoku
+- Graceful fallbacks dla loading states
+- User-friendly error messages
+- Automatic error reporting
+
+## Performance
+- Lazy loading dla dużych komponentów
+- Memoization dla kosztownych obliczeń
+- Proper key props w listach
+- Bundle size monitoring
