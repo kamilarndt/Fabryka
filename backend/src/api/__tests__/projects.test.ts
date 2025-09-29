@@ -1,10 +1,30 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import request from 'supertest';
+import { describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from 'vitest';
+import { createServer } from 'http';
 import app from '../../server';
 import { supabase } from '../../lib/supabase';
 import { clearMockData } from '../../lib/supabase-mock';
 
 describe('Projects API', () => {
+  let server: any;
+  let baseUrl: string;
+
+  beforeAll(async () => {
+    server = createServer(app);
+    await new Promise<void>((resolve) => {
+      server.listen(0, () => {
+        const port = server.address().port;
+        baseUrl = `http://localhost:${port}`;
+        resolve();
+      });
+    });
+  });
+
+  afterAll(async () => {
+    await new Promise<void>((resolve) => {
+      server.close(() => resolve());
+    });
+  });
+
   beforeEach(async () => {
     // Clear all mock data before each test
     clearMockData();
@@ -17,11 +37,11 @@ describe('Projects API', () => {
 
   describe('GET /api/projects', () => {
     it('should return empty array when no projects exist', async () => {
-      const response = await request(app)
-        .get('/api/projects')
-        .expect(200);
-
-      expect(response.body).toEqual([]);
+      const response = await fetch(`${baseUrl}/api/projects`);
+      expect(response.status).toBe(200);
+      
+      const data = await response.json();
+      expect(data).toEqual([]);
     });
 
     it('should return projects list', async () => {
@@ -35,12 +55,12 @@ describe('Projects API', () => {
 
       await supabase.from('projects').insert(testProject);
 
-      const response = await request(app)
-        .get('/api/projects')
-        .expect(200);
-
-      expect(response.body).toHaveLength(1);
-      expect(response.body[0]).toMatchObject({
+      const response = await fetch(`${baseUrl}/api/projects`);
+      expect(response.status).toBe(200);
+      
+      const data = await response.json();
+      expect(data).toHaveLength(1);
+      expect(data[0]).toMatchObject({
         name: 'Test Project',
         project_number: 'P2025/TEST/01',
         status: 'draft'
@@ -56,12 +76,12 @@ describe('Projects API', () => {
 
       await supabase.from('projects').insert(projects);
 
-      const response = await request(app)
-        .get('/api/projects?status=active')
-        .expect(200);
-
-      expect(response.body).toHaveLength(1);
-      expect(response.body[0].status).toBe('active');
+      const response = await fetch(`${baseUrl}/api/projects?status=active`);
+      expect(response.status).toBe(200);
+      
+      const data = await response.json();
+      expect(data).toHaveLength(1);
+      expect(data[0].status).toBe('active');
     });
   });
 
@@ -74,18 +94,24 @@ describe('Projects API', () => {
         client_id: '123e4567-e89b-12d3-a456-426614174000'
       };
 
-      const response = await request(app)
-        .post('/api/projects')
-        .send(newProject)
-        .expect(201);
-
-      expect(response.body).toMatchObject({
+      const response = await fetch(`${baseUrl}/api/projects`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newProject),
+      });
+      
+      expect(response.status).toBe(201);
+      
+      const data = await response.json();
+      expect(data).toMatchObject({
         name: 'New Test Project',
         project_number: 'P2025/NEW/01',
         status: 'draft'
       });
-      expect(response.body).toHaveProperty('id');
-      expect(response.body).toHaveProperty('created_at');
+      expect(data).toHaveProperty('id');
+      expect(data).toHaveProperty('created_at');
     });
 
     it('should validate required fields', async () => {
@@ -94,10 +120,15 @@ describe('Projects API', () => {
         project_number: 'P2025/INV/01'
       };
 
-      await request(app)
-        .post('/api/projects')
-        .send(invalidProject)
-        .expect(400);
+      const response = await fetch(`${baseUrl}/api/projects`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(invalidProject),
+      });
+      
+      expect(response.status).toBe(400);
     });
 
     it('should validate project number uniqueness', async () => {
@@ -109,16 +140,24 @@ describe('Projects API', () => {
       };
 
       // Create first project
-      await request(app)
-        .post('/api/projects')
-        .send(project)
-        .expect(201);
+      const response1 = await fetch(`${baseUrl}/api/projects`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(project),
+      });
+      expect(response1.status).toBe(201);
 
       // Try to create duplicate
-      await request(app)
-        .post('/api/projects')
-        .send(project)
-        .expect(409);
+      const response2 = await fetch(`${baseUrl}/api/projects`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(project),
+      });
+      expect(response2.status).toBe(409);
     });
   });
 
@@ -141,23 +180,34 @@ describe('Projects API', () => {
         status: 'active'
       };
 
-      const response = await request(app)
-        .put(`/api/projects/${project.id}`)
-        .send(updateData)
-        .expect(200);
-
-      expect(response.body.name).toBe('Updated Name');
-      expect(response.body.status).toBe('active');
-      expect(response.body.updated_at).not.toBe(project.updated_at);
+      const response = await fetch(`${baseUrl}/api/projects/${project.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updateData),
+      });
+      
+      expect(response.status).toBe(200);
+      
+      const data = await response.json();
+      expect(data.name).toBe('Updated Name');
+      expect(data.status).toBe('active');
+      expect(data.updated_at).not.toBe(project.updated_at);
     });
 
     it('should return 404 for non-existent project', async () => {
       const fakeId = '00000000-0000-0000-0000-000000000000';
       
-      await request(app)
-        .put(`/api/projects/${fakeId}`)
-        .send({ name: 'Updated Name' })
-        .expect(404);
+      const response = await fetch(`${baseUrl}/api/projects/${fakeId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: 'Updated Name' }),
+      });
+      
+      expect(response.status).toBe(404);
     });
   });
 
@@ -175,9 +225,11 @@ describe('Projects API', () => {
         .select()
         .single();
 
-      await request(app)
-        .delete(`/api/projects/${project.id}`)
-        .expect(204);
+      const response = await fetch(`${baseUrl}/api/projects/${project.id}`, {
+        method: 'DELETE',
+      });
+      
+      expect(response.status).toBe(204);
 
       // Verify deletion
       const { data: deletedProject } = await supabase
@@ -192,9 +244,11 @@ describe('Projects API', () => {
     it('should return 404 for non-existent project', async () => {
       const fakeId = '00000000-0000-0000-0000-000000000000';
       
-      await request(app)
-        .delete(`/api/projects/${fakeId}`)
-        .expect(404);
+      const response = await fetch(`${baseUrl}/api/projects/${fakeId}`, {
+        method: 'DELETE',
+      });
+      
+      expect(response.status).toBe(404);
     });
   });
 });

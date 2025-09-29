@@ -63,20 +63,12 @@ export interface ProjectsResponse {
 // Dane do tworzenia nowego projektu
 export interface CreateProjectRequest {
   name: string;
+  project_number: string;
+  client_id: string;
+  status?: ProjectStatus;
   description?: string;
-  clientId: string;
-  location: {
-    address: string;
-    city: string;
-    postalCode: string;
-    country?: string;
-  };
-  modules: ProjectModule[];
-  timeline: {
-    startDate: string;
-    endDate: string;
-    milestones?: Omit<ProjectMilestone, 'id'>[];
-  };
+  modules?: ProjectModule[];
+  timeline?: any;
 }
 
 // Dane do aktualizacji projektu

@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Set the workspace root to avoid lockfile warnings
+  outputFileTracingRoot: require('path').join(__dirname, '../'),
+  
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
@@ -18,6 +21,15 @@ const nextConfig = {
       test: /\.test\.(js|jsx|ts|tsx)$/,
       loader: 'ignore-loader',
     });
+    
+    // Optimize webpack cache performance
+    config.cache = {
+      type: 'filesystem',
+      buildDependencies: {
+        config: [__filename],
+      },
+    };
+    
     return config;
   },
 };
